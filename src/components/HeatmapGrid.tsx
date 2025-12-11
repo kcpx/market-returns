@@ -74,11 +74,11 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
   }, [periodType, data]);
 
   return (
-    <div className="relative">
+    <div className="flex">
       {/* Fixed left column for market names */}
-      <div className="absolute left-0 top-0 z-10 bg-neutral-900/95 backdrop-blur-sm">
+      <div className="flex-shrink-0 w-44">
         {/* Header spacer */}
-        <div className="h-[28px] mb-3 flex items-center pl-2">
+        <div className="h-[20px] mb-3 flex items-center">
           <span className="text-xs text-neutral-500 font-medium">Market</span>
         </div>
 
@@ -102,8 +102,8 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
 
               {/* Market labels */}
               {markets.map(market => (
-                <div key={market.id} className="flex gap-1 mb-1.5 h-12 items-center group">
-                  <div className="w-44 flex items-center gap-2 pr-3">
+                <div key={market.id} className="flex mb-1.5 h-12 items-center group">
+                  <div className="flex items-center gap-2 pr-3">
                     <div
                       className="w-2.5 h-2.5 rounded-full flex-shrink-0 ring-2 ring-transparent group-hover:ring-white/20 transition-all"
                       style={{ backgroundColor: market.color }}
@@ -122,10 +122,10 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
       {/* Scrollable data area */}
       <div
         ref={scrollContainerRef}
-        className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pl-44">
+        className="flex-1 overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent">
         <div className="min-w-max">
           {/* Header row with periods */}
-          <div className="flex gap-1 mb-3">
+          <div className="flex gap-1 mb-3 h-[20px]">
             {sortedPeriods.map(period => (
               <div
                 key={period}

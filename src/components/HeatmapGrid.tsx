@@ -76,10 +76,10 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
   return (
     <div className="flex">
       {/* Fixed left column for market names */}
-      <div className="flex-shrink-0 w-44">
+      <div className="flex-shrink-0 w-28 sm:w-36 md:w-44">
         {/* Header spacer */}
-        <div className="h-[20px] mb-3 flex items-center">
-          <span className="text-xs text-neutral-500 font-medium">Market</span>
+        <div className="h-4 sm:h-5 mb-2 sm:mb-3 flex items-center">
+          <span className="text-[10px] sm:text-xs text-neutral-500 font-medium">Market</span>
         </div>
 
         {/* Category and market labels */}
@@ -88,27 +88,27 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
           if (!markets || markets.length === 0) return null;
 
           return (
-            <div key={categoryId} className="mb-6">
+            <div key={categoryId} className="mb-4 sm:mb-6">
               {/* Category header */}
-              <div className="flex items-center gap-3 mb-3 h-6">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 h-5 sm:h-6">
                 <div
-                  className="w-4 h-4 rounded-full"
+                  className="w-3 h-3 sm:w-4 sm:h-4 rounded-full flex-shrink-0"
                   style={{ backgroundColor: category.color }}
                 />
-                <span className="text-base font-bold text-neutral-300 uppercase tracking-wider">
+                <span className="text-xs sm:text-sm md:text-base font-bold text-neutral-300 uppercase tracking-wider truncate">
                   {category.label}
                 </span>
               </div>
 
               {/* Market labels */}
               {markets.map(market => (
-                <div key={market.id} className="flex mb-1.5 h-12 items-center group">
-                  <div className="flex items-center gap-2 pr-3">
+                <div key={market.id} className="flex mb-1 sm:mb-1.5 h-8 sm:h-10 md:h-12 items-center group">
+                  <div className="flex items-center gap-1.5 sm:gap-2 pr-2 sm:pr-3">
                     <div
-                      className="w-2.5 h-2.5 rounded-full flex-shrink-0 ring-2 ring-transparent group-hover:ring-white/20 transition-all"
+                      className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full flex-shrink-0 ring-2 ring-transparent group-hover:ring-white/20 transition-all"
                       style={{ backgroundColor: market.color }}
                     />
-                    <span className="text-sm text-neutral-300 truncate group-hover:text-white transition-colors">
+                    <span className="text-[10px] sm:text-xs md:text-sm text-neutral-300 truncate group-hover:text-white transition-colors">
                       {market.name}
                     </span>
                   </div>
@@ -125,11 +125,11 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
         className="flex-1 overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent">
         <div className="min-w-max">
           {/* Header row with periods */}
-          <div className="flex gap-1 mb-3 h-[20px]">
+          <div className="flex gap-0.5 sm:gap-1 mb-2 sm:mb-3 h-4 sm:h-5">
             {sortedPeriods.map(period => (
               <div
                 key={period}
-                className="w-[72px] text-center text-xs text-neutral-400 font-medium"
+                className="w-10 sm:w-14 md:w-[72px] text-center text-[8px] sm:text-[10px] md:text-xs text-neutral-400 font-medium"
               >
                 {formatPeriodLabel(period, periodType)}
               </div>
@@ -142,16 +142,16 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
             if (!markets || markets.length === 0) return null;
 
             return (
-              <div key={categoryId} className="mb-6">
+              <div key={categoryId} className="mb-4 sm:mb-6">
                 {/* Category header spacer */}
-                <div className="h-6 mb-3" />
+                <div className="h-5 sm:h-6 mb-2 sm:mb-3" />
 
                 {/* Market data rows */}
                 {markets.map(market => (
-                  <div key={market.id} className="flex gap-1 mb-1.5">
+                  <div key={market.id} className="flex gap-0.5 sm:gap-1 mb-1 sm:mb-1.5">
                     {/* Return cells */}
                     {sortedPeriods.map(period => (
-                      <div key={period} className="w-[72px]">
+                      <div key={period} className="w-10 sm:w-14 md:w-[72px]">
                         <ReturnCell
                           returnPct={getReturn(market.id, period)}
                           period={period}

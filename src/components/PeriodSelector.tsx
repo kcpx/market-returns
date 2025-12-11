@@ -14,13 +14,13 @@ export function PeriodSelector({ value, onChange }: PeriodSelectorProps) {
   ];
 
   return (
-    <div className="flex gap-1 p-1 bg-neutral-800 rounded-lg">
+    <div className="flex gap-0.5 sm:gap-1 p-0.5 sm:p-1 bg-neutral-800 rounded-lg">
       {options.map((option) => (
         <button
           key={option.value}
           onClick={() => onChange(option.value)}
           className={`
-            px-4 py-2 rounded-md text-sm font-medium
+            px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-md text-xs sm:text-sm font-medium
             transition-all duration-150
             ${value === option.value
               ? 'bg-neutral-100 text-neutral-900'

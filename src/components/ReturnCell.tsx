@@ -14,12 +14,12 @@ export function ReturnCell({ returnPct, period, marketName, showValue = true }: 
 
   return (
     <div
-      className="relative group w-full h-12 flex items-center justify-center text-xs font-medium transition-all duration-150 hover:scale-105 hover:z-10 hover:shadow-lg cursor-default rounded-sm"
+      className="relative group w-full h-8 sm:h-10 md:h-12 flex items-center justify-center text-[8px] sm:text-[10px] md:text-xs font-medium transition-all duration-150 hover:scale-105 hover:z-10 hover:shadow-lg cursor-default rounded-sm"
       style={{ backgroundColor: bgColor }}
       title={`${marketName} ${period}: ${formatReturn(returnPct)}`}
     >
       {showValue && (
-        <span className="text-white/90 drop-shadow-sm">
+        <span className="text-white/90 drop-shadow-sm hidden sm:inline">
           {formatReturn(returnPct)}
         </span>
       )}

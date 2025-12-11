@@ -117,15 +117,15 @@ export function TrendChart({ data, periodType, startYear, endYear }: TrendChartP
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Category selector */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2">
         {sortedCategories.map(([categoryId, category]) => (
           <button
             key={categoryId}
             onClick={() => setSelectedCategory(categoryId)}
             className={`
-              px-4 py-2 rounded-lg text-sm font-medium transition-all
+              px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all
               ${selectedCategory === categoryId
                 ? 'text-white'
                 : 'bg-neutral-800 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-700'
@@ -139,28 +139,29 @@ export function TrendChart({ data, periodType, startYear, endYear }: TrendChartP
       </div>
 
       {/* Chart */}
-      <div className="h-[500px] w-full">
+      <div className="h-[300px] sm:h-[400px] md:h-[500px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+            margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
             <XAxis
               dataKey="period"
               tickFormatter={formatXAxis}
               stroke="#737373"
-              tick={{ fill: '#a3a3a3', fontSize: 12 }}
-              interval={periodType === 'yearly' ? 0 : 'preserveStartEnd'}
-              angle={periodType === 'yearly' ? 0 : -45}
-              textAnchor={periodType === 'yearly' ? 'middle' : 'end'}
-              height={60}
+              tick={{ fill: '#a3a3a3', fontSize: 10 }}
+              interval={periodType === 'yearly' ? 'preserveStartEnd' : 'preserveStartEnd'}
+              angle={-45}
+              textAnchor="end"
+              height={50}
             />
             <YAxis
               stroke="#737373"
-              tick={{ fill: '#a3a3a3', fontSize: 12 }}
+              tick={{ fill: '#a3a3a3', fontSize: 10 }}
               tickFormatter={(value) => `${value}%`}
               domain={['auto', 'auto']}
+              width={40}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend
@@ -197,15 +198,15 @@ export function TrendChart({ data, periodType, startYear, endYear }: TrendChartP
       </div>
 
       {/* Legend with market info */}
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap gap-2 sm:gap-4 justify-center">
         {categoryMarkets.map((market) => (
-          <div key={market.id} className="flex items-center gap-2">
+          <div key={market.id} className="flex items-center gap-1.5 sm:gap-2">
             <div
-              className="w-3 h-3 rounded-full"
+              className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex-shrink-0"
               style={{ backgroundColor: market.color }}
             />
-            <span className="text-sm text-neutral-300">{market.name}</span>
-            <span className="text-xs text-neutral-500">({market.description})</span>
+            <span className="text-xs sm:text-sm text-neutral-300">{market.name}</span>
+            <span className="text-[10px] sm:text-xs text-neutral-500 hidden sm:inline">({market.description})</span>
           </div>
         ))}
       </div>

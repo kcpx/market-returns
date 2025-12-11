@@ -23,12 +23,12 @@ export function YearRangeSelector({
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-sm text-neutral-400">From</span>
+    <div className="flex items-center gap-2 sm:gap-3">
+      <span className="text-xs sm:text-sm text-neutral-400">From</span>
       <select
         value={startYear}
         onChange={(e) => onStartChange(parseInt(e.target.value))}
-        className="bg-neutral-800 border border-neutral-700 rounded-md px-3 py-2 text-sm
+        className="bg-neutral-800 border border-neutral-700 rounded-md px-2 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm
                    text-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-600"
       >
         {years.map(y => (
@@ -37,13 +37,13 @@ export function YearRangeSelector({
           </option>
         ))}
       </select>
-      
-      <span className="text-sm text-neutral-400">to</span>
-      
+
+      <span className="text-xs sm:text-sm text-neutral-400">to</span>
+
       <select
         value={endYear}
         onChange={(e) => onEndChange(parseInt(e.target.value))}
-        className="bg-neutral-800 border border-neutral-700 rounded-md px-3 py-2 text-sm
+        className="bg-neutral-800 border border-neutral-700 rounded-md px-2 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm
                    text-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-600"
       >
         {years.map(y => (

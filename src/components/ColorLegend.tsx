@@ -12,12 +12,12 @@ export function ColorLegend() {
   ];
 
   return (
-    <div className="flex items-center gap-1">
-      <span className="text-xs text-neutral-500 mr-2">Returns:</span>
+    <div className="flex items-center gap-0.5 sm:gap-1">
+      <span className="text-[10px] sm:text-xs text-neutral-500 mr-1 sm:mr-2 hidden sm:inline">Returns:</span>
       {scale.map((item, i) => (
         <div key={i} className="flex flex-col items-center">
-          <div className={`w-6 h-4 rounded-sm ${item.color}`} />
-          <span className="text-[10px] text-neutral-500 mt-1">{item.label}</span>
+          <div className={`w-4 h-3 sm:w-6 sm:h-4 rounded-sm ${item.color}`} />
+          <span className="text-[8px] sm:text-[10px] text-neutral-500 mt-0.5 sm:mt-1">{item.label}</span>
         </div>
       ))}
     </div>

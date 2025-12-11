@@ -70,12 +70,12 @@ export const MARKETS: Market[] = [
   // Fixed Income (5)
   {
     id: 'treasury_10y',
-    name: '10Y Treasury',
+    name: '7-10Y Treasury',
     category: 'bonds',
-    description: 'US 10-Year Treasury Yield',
+    description: 'Treasury Bond ETF (IEF)',
     color: '#06B6D4',
-    source: 'FRED',
-    sourceId: 'DGS10',
+    source: 'YAHOO',
+    sourceId: 'IEF',
   },
   {
     id: 'treasury_long',
@@ -157,10 +157,10 @@ export const MARKETS: Market[] = [
     id: 'natgas',
     name: 'Natural Gas',
     category: 'energy',
-    description: 'Henry Hub',
+    description: 'Natural Gas Futures (NG=F)',
     color: '#F97316',
-    source: 'FRED',
-    sourceId: 'DHHNGSP',
+    source: 'YAHOO',
+    sourceId: 'NG=F',
   },
   {
     id: 'brent',
@@ -175,12 +175,12 @@ export const MARKETS: Market[] = [
   // Real Estate (2)
   {
     id: 'realestate',
-    name: 'Home Prices',
+    name: 'Home Builders',
     category: 'real-estate',
-    description: 'Case-Shiller Index',
+    description: 'Home Construction ETF (ITB)',
     color: '#EC4899',
-    source: 'FRED',
-    sourceId: 'CSUSHPISA',
+    source: 'YAHOO',
+    sourceId: 'ITB',
   },
   {
     id: 'reits',

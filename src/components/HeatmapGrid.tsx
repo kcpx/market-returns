@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import { MarketData, PeriodType, Market } from '@/types';
 import { ReturnCell } from './ReturnCell';
 import { CATEGORIES, getSortedCategories } from '@/lib/markets';
@@ -12,6 +13,7 @@ interface HeatmapGridProps {
 }
 
 export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGridProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   // Get all unique periods across all markets
   const allPeriods = new Set<string>();
   
@@ -60,8 +62,17 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
     return found?.returnPct ?? null;
   };
 
+  // Scroll to the right (most recent data) on initial load
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+    }
+  }, [periodType, data]);
+
   return (
-    <div className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent">
+    <div
+      ref={scrollContainerRef}
+      className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent">
       <div className="min-w-max">
         {/* Header row with periods */}
         <div className="flex gap-1 mb-3 pl-44">

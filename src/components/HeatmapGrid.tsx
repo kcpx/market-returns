@@ -64,9 +64,13 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
 
   // Scroll to the right (most recent data) on initial load
   useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
-    }
+    // Small delay to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+      }
+    }, 100);
+    return () => clearTimeout(timer);
   }, [periodType, data]);
 
   return (

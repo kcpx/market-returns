@@ -57,8 +57,17 @@ export const MARKETS: Market[] = [
     source: 'YAHOO',
     sourceId: 'EEM',
   },
+  {
+    id: 'vwo',
+    name: 'EM Vanguard',
+    category: 'equities',
+    description: 'Vanguard FTSE EM (VWO)',
+    color: '#E879F9',
+    source: 'YAHOO',
+    sourceId: 'VWO',
+  },
 
-  // Fixed Income (4)
+  // Fixed Income (5)
   {
     id: 'treasury_10y',
     name: '10Y Treasury',
@@ -94,6 +103,15 @@ export const MARKETS: Market[] = [
     color: '#38BDF8',
     source: 'YAHOO',
     sourceId: 'HYG',
+  },
+  {
+    id: 'em_bonds',
+    name: 'EM Bonds',
+    category: 'bonds',
+    description: 'Emerging Market Bonds (EMB)',
+    color: '#67E8F9',
+    source: 'YAHOO',
+    sourceId: 'EMB',
   },
 
   // Commodities (4)

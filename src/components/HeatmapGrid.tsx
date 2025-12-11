@@ -22,7 +22,7 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
   
   // Sort periods and filter by year range
   let sortedPeriods = Array.from(allPeriods).sort();
-  
+
   if (startYear || endYear) {
     sortedPeriods = sortedPeriods.filter(period => {
       const year = parseInt(period.split('-')[0]);
@@ -30,6 +30,14 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
       if (endYear && year > endYear) return false;
       return true;
     });
+  }
+
+  // Limit periods for monthly/quarterly to show recent data only
+  // Monthly: last 24 months, Quarterly: last 12 quarters
+  if (periodType === 'monthly' && sortedPeriods.length > 24) {
+    sortedPeriods = sortedPeriods.slice(-24);
+  } else if (periodType === 'quarterly' && sortedPeriods.length > 12) {
+    sortedPeriods = sortedPeriods.slice(-12);
   }
 
   // Group markets by category

@@ -11,7 +11,6 @@ export function PeriodSelector({ value, onChange }: PeriodSelectorProps) {
   const options: { value: PeriodType; label: string }[] = [
     { value: 'yearly', label: 'Yearly' },
     { value: 'quarterly', label: 'Quarterly' },
-    { value: 'monthly', label: 'Monthly' },
   ];
 
   return (

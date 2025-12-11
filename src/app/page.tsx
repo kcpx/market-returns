@@ -6,7 +6,8 @@ import {
   HeatmapGrid,
   PeriodSelector,
   ColorLegend,
-  YearRangeSelector
+  YearRangeSelector,
+  TrendChart
 } from '@/components';
 import staticMarketData from '@/data/market-data.json';
 
@@ -17,6 +18,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [periodType, setPeriodType] = useState<PeriodType>('yearly');
+  const [viewMode, setViewMode] = useState<'heatmap' | 'chart'>('heatmap');
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [nextUpdate, setNextUpdate] = useState<Date | null>(null);
 
@@ -203,6 +205,40 @@ export default function Home() {
         {/* Controls */}
         <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between mb-8">
           <div className="flex flex-wrap gap-4 items-center">
+            {/* View Mode Toggle */}
+            <div className="flex gap-1 p-1 bg-neutral-800 rounded-lg">
+              <button
+                onClick={() => setViewMode('heatmap')}
+                className={`
+                  px-4 py-2 rounded-md text-sm font-medium transition-all duration-150 flex items-center gap-2
+                  ${viewMode === 'heatmap'
+                    ? 'bg-neutral-100 text-neutral-900'
+                    : 'text-neutral-400 hover:text-neutral-100 hover:bg-neutral-700'
+                  }
+                `}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                Heatmap
+              </button>
+              <button
+                onClick={() => setViewMode('chart')}
+                className={`
+                  px-4 py-2 rounded-md text-sm font-medium transition-all duration-150 flex items-center gap-2
+                  ${viewMode === 'chart'
+                    ? 'bg-neutral-100 text-neutral-900'
+                    : 'text-neutral-400 hover:text-neutral-100 hover:bg-neutral-700'
+                  }
+                `}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                </svg>
+                Chart
+              </button>
+            </div>
+            <div className="h-8 w-px bg-neutral-800 hidden md:block" />
             <PeriodSelector value={periodType} onChange={setPeriodType} />
             <div className="h-8 w-px bg-neutral-800 hidden md:block" />
             <YearRangeSelector
@@ -214,10 +250,10 @@ export default function Home() {
               onEndChange={setEndYear}
             />
           </div>
-          <ColorLegend />
+          {viewMode === 'heatmap' && <ColorLegend />}
         </div>
 
-        {/* Main Grid */}
+        {/* Main Content */}
         <div className="bg-neutral-900/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-neutral-800/50 shadow-2xl">
           {loading ? (
             <div className="flex items-center justify-center py-20">
@@ -226,8 +262,15 @@ export default function Home() {
                 <p className="text-neutral-400">Loading live market data...</p>
               </div>
             </div>
-          ) : (
+          ) : viewMode === 'heatmap' ? (
             <HeatmapGrid
+              data={data}
+              periodType={periodType}
+              startYear={startYear}
+              endYear={endYear}
+            />
+          ) : (
+            <TrendChart
               data={data}
               periodType={periodType}
               startYear={startYear}

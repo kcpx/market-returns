@@ -1,0 +1,550 @@
+{
+  "markets": [
+    {
+      "id": "sp500",
+      "name": "S&P 500",
+      "category": "equities",
+      "description": "US Large Cap Stocks",
+      "color": "#6366F1",
+      "source": "FRED",
+      "sourceId": "SP500"
+    },
+    {
+      "id": "nasdaq",
+      "name": "Nasdaq 100",
+      "category": "equities",
+      "description": "US Tech Stocks",
+      "color": "#8B5CF6",
+      "source": "YAHOO",
+      "sourceId": "^NDX"
+    },
+    {
+      "id": "emerging",
+      "name": "Emerging Mkts",
+      "category": "equities",
+      "description": "MSCI Emerging Markets",
+      "color": "#A855F7",
+      "source": "YAHOO",
+      "sourceId": "EEM"
+    },
+    {
+      "id": "treasury_10y",
+      "name": "10Y Treasury",
+      "category": "bonds",
+      "description": "US 10-Year Treasury Yield",
+      "color": "#06B6D4",
+      "source": "FRED",
+      "sourceId": "DGS10"
+    },
+    {
+      "id": "corp_bonds",
+      "name": "Corp Bonds",
+      "category": "bonds",
+      "description": "Investment Grade Corporate",
+      "color": "#0EA5E9",
+      "source": "YAHOO",
+      "sourceId": "LQD"
+    },
+    {
+      "id": "gold",
+      "name": "Gold",
+      "category": "commodities",
+      "description": "Gold Price (USD/oz)",
+      "color": "#F59E0B",
+      "source": "FRED",
+      "sourceId": "GOLDAMGBD228NLBM"
+    },
+    {
+      "id": "oil",
+      "name": "Crude Oil",
+      "category": "commodities",
+      "description": "WTI Crude",
+      "color": "#78716C",
+      "source": "FRED",
+      "sourceId": "DCOILWTICO"
+    },
+    {
+      "id": "natgas",
+      "name": "Natural Gas",
+      "category": "energy",
+      "description": "Henry Hub",
+      "color": "#F97316",
+      "source": "FRED",
+      "sourceId": "DHHNGSP"
+    },
+    {
+      "id": "realestate",
+      "name": "Real Estate",
+      "category": "real-estate",
+      "description": "US REITs (VNQ)",
+      "color": "#EC4899",
+      "source": "YAHOO",
+      "sourceId": "VNQ"
+    },
+    {
+      "id": "dxy",
+      "name": "US Dollar",
+      "category": "forex",
+      "description": "Trade-Weighted Dollar",
+      "color": "#22C55E",
+      "source": "FRED",
+      "sourceId": "DTWEXBGS"
+    },
+    {
+      "id": "btc",
+      "name": "Bitcoin",
+      "category": "crypto",
+      "description": "BTC/USD",
+      "color": "#F7931A",
+      "source": "COINGECKO",
+      "sourceId": "bitcoin"
+    },
+    {
+      "id": "eth",
+      "name": "Ethereum",
+      "category": "crypto",
+      "description": "ETH/USD",
+      "color": "#627EEA",
+      "source": "COINGECKO",
+      "sourceId": "ethereum"
+    }
+  ],
+  "returns": {
+    "sp500": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": 1.59 },
+        { "period": "2024-02", "returnPct": 5.17 },
+        { "period": "2024-03", "returnPct": 3.10 },
+        { "period": "2024-04", "returnPct": -4.16 },
+        { "period": "2024-05", "returnPct": 4.80 },
+        { "period": "2024-06", "returnPct": 3.47 },
+        { "period": "2024-07", "returnPct": 1.13 },
+        { "period": "2024-08", "returnPct": 2.28 },
+        { "period": "2024-09", "returnPct": 2.02 },
+        { "period": "2024-10", "returnPct": -0.99 },
+        { "period": "2024-11", "returnPct": 5.73 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": 7.03 },
+        { "period": "2023-Q2", "returnPct": 8.30 },
+        { "period": "2023-Q3", "returnPct": -3.65 },
+        { "period": "2023-Q4", "returnPct": 11.24 },
+        { "period": "2024-Q1", "returnPct": 10.16 },
+        { "period": "2024-Q2", "returnPct": 3.92 },
+        { "period": "2024-Q3", "returnPct": 5.53 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": -0.73 },
+        { "period": "2016", "returnPct": 9.54 },
+        { "period": "2017", "returnPct": 19.42 },
+        { "period": "2018", "returnPct": -6.24 },
+        { "period": "2019", "returnPct": 28.88 },
+        { "period": "2020", "returnPct": 16.26 },
+        { "period": "2021", "returnPct": 26.89 },
+        { "period": "2022", "returnPct": -19.44 },
+        { "period": "2023", "returnPct": 24.23 },
+        { "period": "2024", "returnPct": 23.31 }
+      ]
+    },
+    "nasdaq": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": 1.85 },
+        { "period": "2024-02", "returnPct": 5.29 },
+        { "period": "2024-03", "returnPct": 1.17 },
+        { "period": "2024-04", "returnPct": -4.46 },
+        { "period": "2024-05", "returnPct": 6.33 },
+        { "period": "2024-06", "returnPct": 6.18 },
+        { "period": "2024-07", "returnPct": -1.63 },
+        { "period": "2024-08", "returnPct": 1.13 },
+        { "period": "2024-09", "returnPct": 2.48 },
+        { "period": "2024-10", "returnPct": -0.85 },
+        { "period": "2024-11", "returnPct": 5.23 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": 20.49 },
+        { "period": "2023-Q2", "returnPct": 15.16 },
+        { "period": "2023-Q3", "returnPct": -2.98 },
+        { "period": "2023-Q4", "returnPct": 14.64 },
+        { "period": "2024-Q1", "returnPct": 8.49 },
+        { "period": "2024-Q2", "returnPct": 7.84 },
+        { "period": "2024-Q3", "returnPct": 1.94 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": 8.43 },
+        { "period": "2016", "returnPct": 5.89 },
+        { "period": "2017", "returnPct": 31.52 },
+        { "period": "2018", "returnPct": -1.04 },
+        { "period": "2019", "returnPct": 37.96 },
+        { "period": "2020", "returnPct": 47.58 },
+        { "period": "2021", "returnPct": 26.63 },
+        { "period": "2022", "returnPct": -32.97 },
+        { "period": "2023", "returnPct": 53.81 },
+        { "period": "2024", "returnPct": 24.45 }
+      ]
+    },
+    "emerging": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": -4.64 },
+        { "period": "2024-02", "returnPct": 4.78 },
+        { "period": "2024-03", "returnPct": 2.18 },
+        { "period": "2024-04", "returnPct": 0.50 },
+        { "period": "2024-05", "returnPct": 0.62 },
+        { "period": "2024-06", "returnPct": 3.94 },
+        { "period": "2024-07", "returnPct": 0.26 },
+        { "period": "2024-08", "returnPct": 1.56 },
+        { "period": "2024-09", "returnPct": 6.46 },
+        { "period": "2024-10", "returnPct": -4.33 },
+        { "period": "2024-11", "returnPct": -3.04 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": 3.78 },
+        { "period": "2023-Q2", "returnPct": 0.89 },
+        { "period": "2023-Q3", "returnPct": -2.87 },
+        { "period": "2023-Q4", "returnPct": 7.86 },
+        { "period": "2024-Q1", "returnPct": 2.07 },
+        { "period": "2024-Q2", "returnPct": 5.11 },
+        { "period": "2024-Q3", "returnPct": 8.43 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": -14.60 },
+        { "period": "2016", "returnPct": 11.60 },
+        { "period": "2017", "returnPct": 37.75 },
+        { "period": "2018", "returnPct": -14.25 },
+        { "period": "2019", "returnPct": 18.90 },
+        { "period": "2020", "returnPct": 18.69 },
+        { "period": "2021", "returnPct": -2.22 },
+        { "period": "2022", "returnPct": -19.74 },
+        { "period": "2023", "returnPct": 10.27 },
+        { "period": "2024", "returnPct": 7.89 }
+      ]
+    },
+    "treasury_10y": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": 12.4 },
+        { "period": "2024-02", "returnPct": 8.8 },
+        { "period": "2024-03", "returnPct": -5.2 },
+        { "period": "2024-04", "returnPct": 11.7 },
+        { "period": "2024-05", "returnPct": -5.3 },
+        { "period": "2024-06", "returnPct": -3.1 },
+        { "period": "2024-07", "returnPct": -8.4 },
+        { "period": "2024-08", "returnPct": -7.7 },
+        { "period": "2024-09", "returnPct": -5.8 },
+        { "period": "2024-10", "returnPct": 13.1 },
+        { "period": "2024-11", "returnPct": -1.2 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": -10.5 },
+        { "period": "2023-Q2", "returnPct": 17.3 },
+        { "period": "2023-Q3", "returnPct": 17.2 },
+        { "period": "2023-Q4", "returnPct": -20.1 },
+        { "period": "2024-Q1", "returnPct": 15.6 },
+        { "period": "2024-Q2", "returnPct": 2.8 },
+        { "period": "2024-Q3", "returnPct": -20.8 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": -2.6 },
+        { "period": "2016", "returnPct": 7.5 },
+        { "period": "2017", "returnPct": -1.2 },
+        { "period": "2018", "returnPct": 11.6 },
+        { "period": "2019", "returnPct": -28.6 },
+        { "period": "2020", "returnPct": -51.6 },
+        { "period": "2021", "returnPct": 63.4 },
+        { "period": "2022", "returnPct": 155.3 },
+        { "period": "2023", "returnPct": 0.0 },
+        { "period": "2024", "returnPct": 18.0 }
+      ]
+    },
+    "corp_bonds": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": -0.79 },
+        { "period": "2024-02", "returnPct": -1.34 },
+        { "period": "2024-03", "returnPct": 1.26 },
+        { "period": "2024-04", "returnPct": -2.50 },
+        { "period": "2024-05", "returnPct": 1.81 },
+        { "period": "2024-06", "returnPct": 0.95 },
+        { "period": "2024-07", "returnPct": 2.39 },
+        { "period": "2024-08", "returnPct": 1.58 },
+        { "period": "2024-09", "returnPct": 1.34 },
+        { "period": "2024-10", "returnPct": -2.49 },
+        { "period": "2024-11", "returnPct": 1.14 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": 3.12 },
+        { "period": "2023-Q2", "returnPct": -0.45 },
+        { "period": "2023-Q3", "returnPct": -4.21 },
+        { "period": "2023-Q4", "returnPct": 8.93 },
+        { "period": "2024-Q1", "returnPct": -0.89 },
+        { "period": "2024-Q2", "returnPct": 0.23 },
+        { "period": "2024-Q3", "returnPct": 5.42 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": -0.77 },
+        { "period": "2016", "returnPct": 5.87 },
+        { "period": "2017", "returnPct": 6.41 },
+        { "period": "2018", "returnPct": -3.77 },
+        { "period": "2019", "returnPct": 17.37 },
+        { "period": "2020", "returnPct": 10.66 },
+        { "period": "2021", "returnPct": -1.84 },
+        { "period": "2022", "returnPct": -17.93 },
+        { "period": "2023", "returnPct": 8.89 },
+        { "period": "2024", "returnPct": 3.21 }
+      ]
+    },
+    "gold": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": -1.15 },
+        { "period": "2024-02", "returnPct": 0.24 },
+        { "period": "2024-03", "returnPct": 9.08 },
+        { "period": "2024-04", "returnPct": 2.96 },
+        { "period": "2024-05", "returnPct": 1.82 },
+        { "period": "2024-06", "returnPct": -0.02 },
+        { "period": "2024-07", "returnPct": 5.19 },
+        { "period": "2024-08", "returnPct": 2.28 },
+        { "period": "2024-09", "returnPct": 5.24 },
+        { "period": "2024-10", "returnPct": 4.15 },
+        { "period": "2024-11", "returnPct": -3.41 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": 8.05 },
+        { "period": "2023-Q2", "returnPct": -2.55 },
+        { "period": "2023-Q3", "returnPct": -3.68 },
+        { "period": "2023-Q4", "returnPct": 11.57 },
+        { "period": "2024-Q1", "returnPct": 8.08 },
+        { "period": "2024-Q2", "returnPct": 4.81 },
+        { "period": "2024-Q3", "returnPct": 13.22 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": -10.42 },
+        { "period": "2016", "returnPct": 8.65 },
+        { "period": "2017", "returnPct": 12.09 },
+        { "period": "2018", "returnPct": -0.72 },
+        { "period": "2019", "returnPct": 18.83 },
+        { "period": "2020", "returnPct": 24.65 },
+        { "period": "2021", "returnPct": -4.12 },
+        { "period": "2022", "returnPct": 0.22 },
+        { "period": "2023", "returnPct": 13.10 },
+        { "period": "2024", "returnPct": 27.93 }
+      ]
+    },
+    "oil": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": 5.92 },
+        { "period": "2024-02", "returnPct": 3.17 },
+        { "period": "2024-03", "returnPct": 6.31 },
+        { "period": "2024-04", "returnPct": 1.53 },
+        { "period": "2024-05", "returnPct": -6.01 },
+        { "period": "2024-06", "returnPct": 5.84 },
+        { "period": "2024-07", "returnPct": -4.49 },
+        { "period": "2024-08", "returnPct": -5.64 },
+        { "period": "2024-09", "returnPct": -7.26 },
+        { "period": "2024-10", "returnPct": -1.66 },
+        { "period": "2024-11", "returnPct": -1.83 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": -5.68 },
+        { "period": "2023-Q2", "returnPct": -6.67 },
+        { "period": "2023-Q3", "returnPct": 28.52 },
+        { "period": "2023-Q4", "returnPct": -21.08 },
+        { "period": "2024-Q1", "returnPct": 16.08 },
+        { "period": "2024-Q2", "returnPct": 1.12 },
+        { "period": "2024-Q3", "returnPct": -16.37 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": -30.47 },
+        { "period": "2016", "returnPct": 45.09 },
+        { "period": "2017", "returnPct": 12.47 },
+        { "period": "2018", "returnPct": -24.84 },
+        { "period": "2019", "returnPct": 34.47 },
+        { "period": "2020", "returnPct": -20.54 },
+        { "period": "2021", "returnPct": 55.00 },
+        { "period": "2022", "returnPct": 6.72 },
+        { "period": "2023", "returnPct": -10.73 },
+        { "period": "2024", "returnPct": 0.10 }
+      ]
+    },
+    "natgas": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": -20.18 },
+        { "period": "2024-02", "returnPct": -11.35 },
+        { "period": "2024-03", "returnPct": -3.56 },
+        { "period": "2024-04", "returnPct": -7.31 },
+        { "period": "2024-05", "returnPct": 34.28 },
+        { "period": "2024-06", "returnPct": -14.89 },
+        { "period": "2024-07", "returnPct": 1.92 },
+        { "period": "2024-08", "returnPct": -4.82 },
+        { "period": "2024-09", "returnPct": 16.56 },
+        { "period": "2024-10", "returnPct": 5.73 },
+        { "period": "2024-11", "returnPct": 27.45 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": -50.40 },
+        { "period": "2023-Q2", "returnPct": -19.62 },
+        { "period": "2023-Q3", "returnPct": 4.39 },
+        { "period": "2023-Q4", "returnPct": -18.16 },
+        { "period": "2024-Q1", "returnPct": -31.87 },
+        { "period": "2024-Q2", "returnPct": 6.10 },
+        { "period": "2024-Q3", "returnPct": 12.94 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": -19.09 },
+        { "period": "2016", "returnPct": 58.97 },
+        { "period": "2017", "returnPct": -20.70 },
+        { "period": "2018", "returnPct": 36.95 },
+        { "period": "2019", "returnPct": -45.79 },
+        { "period": "2020", "returnPct": 15.98 },
+        { "period": "2021", "returnPct": 46.85 },
+        { "period": "2022", "returnPct": 20.11 },
+        { "period": "2023", "returnPct": -43.97 },
+        { "period": "2024", "returnPct": 33.86 }
+      ]
+    },
+    "realestate": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": -4.70 },
+        { "period": "2024-02", "returnPct": -2.14 },
+        { "period": "2024-03", "returnPct": 2.30 },
+        { "period": "2024-04", "returnPct": -7.93 },
+        { "period": "2024-05", "returnPct": 4.67 },
+        { "period": "2024-06", "returnPct": 1.56 },
+        { "period": "2024-07", "returnPct": 7.30 },
+        { "period": "2024-08", "returnPct": 5.08 },
+        { "period": "2024-09", "returnPct": 2.54 },
+        { "period": "2024-10", "returnPct": -3.01 },
+        { "period": "2024-11", "returnPct": 1.57 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": 1.27 },
+        { "period": "2023-Q2", "returnPct": -2.48 },
+        { "period": "2023-Q3", "returnPct": -8.16 },
+        { "period": "2023-Q4", "returnPct": 17.55 },
+        { "period": "2024-Q1", "returnPct": -4.65 },
+        { "period": "2024-Q2", "returnPct": -2.04 },
+        { "period": "2024-Q3", "returnPct": 15.73 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": 2.37 },
+        { "period": "2016", "returnPct": 8.53 },
+        { "period": "2017", "returnPct": 4.95 },
+        { "period": "2018", "returnPct": -5.95 },
+        { "period": "2019", "returnPct": 28.91 },
+        { "period": "2020", "returnPct": -4.72 },
+        { "period": "2021", "returnPct": 40.33 },
+        { "period": "2022", "returnPct": -26.21 },
+        { "period": "2023", "returnPct": 10.36 },
+        { "period": "2024", "returnPct": 6.12 }
+      ]
+    },
+    "dxy": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": 1.92 },
+        { "period": "2024-02", "returnPct": 0.71 },
+        { "period": "2024-03", "returnPct": 0.29 },
+        { "period": "2024-04", "returnPct": 1.66 },
+        { "period": "2024-05", "returnPct": -1.58 },
+        { "period": "2024-06", "returnPct": 1.24 },
+        { "period": "2024-07", "returnPct": -1.71 },
+        { "period": "2024-08", "returnPct": -2.30 },
+        { "period": "2024-09", "returnPct": -0.88 },
+        { "period": "2024-10", "returnPct": 3.17 },
+        { "period": "2024-11", "returnPct": 1.74 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": -1.30 },
+        { "period": "2023-Q2", "returnPct": 0.42 },
+        { "period": "2023-Q3", "returnPct": 3.15 },
+        { "period": "2023-Q4", "returnPct": -4.59 },
+        { "period": "2024-Q1", "returnPct": 2.94 },
+        { "period": "2024-Q2", "returnPct": 1.31 },
+        { "period": "2024-Q3", "returnPct": -4.80 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": 8.27 },
+        { "period": "2016", "returnPct": 2.42 },
+        { "period": "2017", "returnPct": -6.61 },
+        { "period": "2018", "returnPct": 3.06 },
+        { "period": "2019", "returnPct": -0.79 },
+        { "period": "2020", "returnPct": -5.87 },
+        { "period": "2021", "returnPct": 5.16 },
+        { "period": "2022", "returnPct": 9.12 },
+        { "period": "2023", "returnPct": -5.38 },
+        { "period": "2024", "returnPct": 2.94 }
+      ]
+    },
+    "btc": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": 0.67 },
+        { "period": "2024-02", "returnPct": 43.86 },
+        { "period": "2024-03", "returnPct": 16.61 },
+        { "period": "2024-04", "returnPct": -14.76 },
+        { "period": "2024-05", "returnPct": 11.12 },
+        { "period": "2024-06", "returnPct": -6.96 },
+        { "period": "2024-07", "returnPct": 3.08 },
+        { "period": "2024-08", "returnPct": -8.60 },
+        { "period": "2024-09", "returnPct": 7.36 },
+        { "period": "2024-10", "returnPct": 10.83 },
+        { "period": "2024-11", "returnPct": 37.42 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": 71.77 },
+        { "period": "2023-Q2", "returnPct": 6.93 },
+        { "period": "2023-Q3", "returnPct": -11.05 },
+        { "period": "2023-Q4", "returnPct": 56.98 },
+        { "period": "2024-Q1", "returnPct": 68.75 },
+        { "period": "2024-Q2", "returnPct": -12.02 },
+        { "period": "2024-Q3", "returnPct": 1.25 }
+      ],
+      "yearly": [
+        { "period": "2015", "returnPct": 35.79 },
+        { "period": "2016", "returnPct": 125.44 },
+        { "period": "2017", "returnPct": 1318.05 },
+        { "period": "2018", "returnPct": -72.56 },
+        { "period": "2019", "returnPct": 87.17 },
+        { "period": "2020", "returnPct": 303.48 },
+        { "period": "2021", "returnPct": 59.79 },
+        { "period": "2022", "returnPct": -64.30 },
+        { "period": "2023", "returnPct": 156.03 },
+        { "period": "2024", "returnPct": 124.26 }
+      ]
+    },
+    "eth": {
+      "monthly": [
+        { "period": "2024-01", "returnPct": 0.91 },
+        { "period": "2024-02", "returnPct": 46.28 },
+        { "period": "2024-03", "returnPct": 9.71 },
+        { "period": "2024-04", "returnPct": -17.43 },
+        { "period": "2024-05", "returnPct": 24.57 },
+        { "period": "2024-06", "returnPct": -9.83 },
+        { "period": "2024-07", "returnPct": -6.05 },
+        { "period": "2024-08", "returnPct": -22.23 },
+        { "period": "2024-09", "returnPct": 3.56 },
+        { "period": "2024-10", "returnPct": -3.74 },
+        { "period": "2024-11", "returnPct": 47.26 }
+      ],
+      "quarterly": [
+        { "period": "2023-Q1", "returnPct": 51.44 },
+        { "period": "2023-Q2", "returnPct": 5.71 },
+        { "period": "2023-Q3", "returnPct": -12.81 },
+        { "period": "2023-Q4", "returnPct": 36.83 },
+        { "period": "2024-Q1", "returnPct": 59.82 },
+        { "period": "2024-Q2", "returnPct": -5.22 },
+        { "period": "2024-Q3", "returnPct": -24.35 }
+      ],
+      "yearly": [
+        { "period": "2016", "returnPct": 754.89 },
+        { "period": "2017", "returnPct": 9162.28 },
+        { "period": "2018", "returnPct": -82.34 },
+        { "period": "2019", "returnPct": -8.03 },
+        { "period": "2020", "returnPct": 467.58 },
+        { "period": "2021", "returnPct": 398.53 },
+        { "period": "2022", "returnPct": -67.37 },
+        { "period": "2023", "returnPct": 90.54 },
+        { "period": "2024", "returnPct": 46.23 }
+      ]
+    }
+  },
+  "metadata": {
+    "lastUpdated": "2024-12-01T00:00:00.000Z",
+    "dataStart": "2015",
+    "dataEnd": "2024"
+  }
+}

@@ -1,0 +1,259 @@
+'use client';
+
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { PeriodType, MarketData } from '@/types';
+import {
+  HeatmapGrid,
+  PeriodSelector,
+  ColorLegend,
+  YearRangeSelector
+} from '@/components';
+import staticMarketData from '@/data/market-data.json';
+
+const AUTO_REFRESH_INTERVAL = 60 * 60 * 1000; // 1 hour in milliseconds
+
+export default function Home() {
+  const [data, setData] = useState<MarketData>(staticMarketData as MarketData);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [periodType, setPeriodType] = useState<PeriodType>('yearly');
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [nextUpdate, setNextUpdate] = useState<Date | null>(null);
+
+  // Fetch live data function
+  const fetchLiveData = useCallback(async (showLoading = true) => {
+    try {
+      if (showLoading) setLoading(true);
+      const response = await fetch('/api/market-data');
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch live data');
+      }
+
+      const liveData = await response.json();
+      setData(liveData);
+      setError(null);
+      setLastUpdated(new Date());
+      setNextUpdate(new Date(Date.now() + AUTO_REFRESH_INTERVAL));
+    } catch (err) {
+      console.error('Error fetching live data:', err);
+      setError('Using cached data - live fetch failed');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Fetch on mount and set up auto-refresh
+  useEffect(() => {
+    fetchLiveData();
+
+    // Set up auto-refresh every hour
+    const intervalId = setInterval(() => {
+      fetchLiveData(false); // Don't show loading spinner on auto-refresh
+    }, AUTO_REFRESH_INTERVAL);
+
+    return () => clearInterval(intervalId);
+  }, [fetchLiveData]);
+
+  // Calculate year range from data
+  const { minYear, maxYear } = useMemo(() => {
+    let min = Infinity;
+    let max = -Infinity;
+
+    for (const marketId in data.returns) {
+      const yearly = data.returns[marketId].yearly;
+      for (const period of yearly) {
+        const year = parseInt(period.period.split('-')[0]);
+        min = Math.min(min, year);
+        max = Math.max(max, year);
+      }
+    }
+
+    return { minYear: min, maxYear: max };
+  }, [data]);
+
+  const [startYear, setStartYear] = useState(2000);
+  const [endYear, setEndYear] = useState(2025);
+
+  // Update year range when data changes
+  useEffect(() => {
+    if (minYear !== Infinity && maxYear !== -Infinity) {
+      setStartYear(minYear);
+      setEndYear(maxYear);
+    }
+  }, [minYear, maxYear]);
+
+  // Calculate summary stats
+  const summaryStats = useMemo(() => {
+    let bestMarket = { id: '', name: '', returnPct: -Infinity };
+    let worstMarket = { id: '', name: '', returnPct: Infinity };
+
+    for (const market of data.markets) {
+      const yearly = data.returns[market.id]?.yearly || [];
+      const latestReturn = yearly[yearly.length - 1]?.returnPct;
+
+      if (latestReturn !== undefined && latestReturn !== null) {
+        if (latestReturn > bestMarket.returnPct) {
+          bestMarket = { id: market.id, name: market.name, returnPct: latestReturn };
+        }
+        if (latestReturn < worstMarket.returnPct) {
+          worstMarket = { id: market.id, name: market.name, returnPct: latestReturn };
+        }
+      }
+    }
+
+    return { bestMarket, worstMarket };
+  }, [data]);
+
+  return (
+    <main className="min-h-screen bg-[#09090b]">
+      {/* Background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-indigo-950/20 via-transparent to-amber-950/10 pointer-events-none" />
+
+      <div className="relative max-w-[1600px] mx-auto p-6 md:p-10">
+        {/* Header */}
+        <header className="mb-12">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-neutral-100 tracking-tight">
+                Market Returns
+              </h1>
+            </div>
+
+            {/* Live Data Status */}
+            <div className="flex items-center gap-3">
+              {loading ? (
+                <div className="flex items-center gap-2 px-3 py-2 bg-neutral-800/60 rounded-lg border border-neutral-700">
+                  <div className="w-3 h-3 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-sm text-neutral-400">Fetching live data...</span>
+                </div>
+              ) : error ? (
+                <div className="flex items-center gap-2 px-3 py-2 bg-amber-900/20 rounded-lg border border-amber-700/50">
+                  <div className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span className="text-sm text-amber-400">{error}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 px-3 py-2 bg-neutral-800/60 rounded-lg border border-neutral-700">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-sm font-medium text-emerald-400">LIVE</span>
+                  </div>
+                  <div className="w-px h-4 bg-neutral-600" />
+                  <div className="text-xs text-neutral-400">
+                    <span>Updated: </span>
+                    <span className="text-neutral-300">
+                      {lastUpdated?.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                  <div className="w-px h-4 bg-neutral-600" />
+                  <div className="text-xs text-neutral-500">
+                    Auto-refresh in 1hr
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <p className="text-neutral-400 max-w-2xl text-lg">
+            Every major asset class. Every year. One view.
+          </p>
+        </header>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+          <div className="bg-neutral-900/60 backdrop-blur border border-neutral-800 rounded-xl p-4">
+            <div className="text-xs text-neutral-500 uppercase tracking-wider mb-1">Markets</div>
+            <div className="text-2xl font-bold text-neutral-100">{data.markets.length}</div>
+          </div>
+          <div className="bg-neutral-900/60 backdrop-blur border border-neutral-800 rounded-xl p-4">
+            <div className="text-xs text-neutral-500 uppercase tracking-wider mb-1">Years</div>
+            <div className="text-2xl font-bold text-neutral-100">{maxYear - minYear + 1}</div>
+          </div>
+          <div className="bg-neutral-900/60 backdrop-blur border border-neutral-800 rounded-xl p-4">
+            <div className="text-xs text-neutral-500 uppercase tracking-wider mb-1">Best YTD</div>
+            <div className="text-2xl font-bold text-emerald-400">
+              {summaryStats.bestMarket.name || '—'}
+            </div>
+            <div className="text-xs text-emerald-400/70">
+              {summaryStats.bestMarket.returnPct !== -Infinity
+                ? `+${summaryStats.bestMarket.returnPct.toFixed(1)}%`
+                : '—'}
+            </div>
+          </div>
+          <div className="bg-neutral-900/60 backdrop-blur border border-neutral-800 rounded-xl p-4">
+            <div className="text-xs text-neutral-500 uppercase tracking-wider mb-1">Worst YTD</div>
+            <div className="text-2xl font-bold text-rose-400">
+              {summaryStats.worstMarket.name || '—'}
+            </div>
+            <div className="text-xs text-rose-400/70">
+              {summaryStats.worstMarket.returnPct !== Infinity
+                ? `${summaryStats.worstMarket.returnPct.toFixed(1)}%`
+                : '—'}
+            </div>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between mb-8">
+          <div className="flex flex-wrap gap-4 items-center">
+            <PeriodSelector value={periodType} onChange={setPeriodType} />
+            <div className="h-8 w-px bg-neutral-800 hidden md:block" />
+            <YearRangeSelector
+              minYear={minYear !== Infinity ? minYear : 2000}
+              maxYear={maxYear !== -Infinity ? maxYear : 2025}
+              startYear={startYear}
+              endYear={endYear}
+              onStartChange={setStartYear}
+              onEndChange={setEndYear}
+            />
+          </div>
+          <ColorLegend />
+        </div>
+
+        {/* Main Grid */}
+        <div className="bg-neutral-900/40 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-neutral-800/50 shadow-2xl">
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-8 h-8 border-3 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                <p className="text-neutral-400">Loading live market data...</p>
+              </div>
+            </div>
+          ) : (
+            <HeatmapGrid
+              data={data}
+              periodType={periodType}
+              startYear={startYear}
+              endYear={endYear}
+            />
+          )}
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-12 text-center space-y-3">
+          <p className="text-sm text-neutral-500">
+            Data sourced from FRED, Yahoo Finance, and CoinGecko.
+            Last updated: {new Date(data.metadata.lastUpdated).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </p>
+          <p className="text-xs text-neutral-600">
+            Treasury yields shown as yield change (bps), not bond price returns.
+            Crypto data available from 2015 (BTC) and 2016 (ETH).
+          </p>
+        </footer>
+      </div>
+    </main>
+  );
+}

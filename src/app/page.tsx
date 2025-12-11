@@ -281,7 +281,20 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-6 sm:mt-8 md:mt-12 text-center space-y-2 sm:space-y-3">
+        <footer className="mt-6 sm:mt-8 md:mt-12 text-center space-y-3 sm:space-y-4">
+          {/* Disclaimer */}
+          <div className="bg-neutral-900/60 border border-neutral-800 rounded-lg p-3 sm:p-4 max-w-3xl mx-auto">
+            <p className="text-[10px] sm:text-xs text-amber-500/90 font-medium mb-1.5 sm:mb-2">
+              Disclaimer - Not Financial Advice
+            </p>
+            <p className="text-[10px] sm:text-xs text-neutral-500 leading-relaxed">
+              This data is for informational purposes only and does not constitute financial advice,
+              investment recommendations, or an offer to buy or sell any securities. Past performance
+              is not indicative of future results. Always do your own research and consult with a
+              qualified financial advisor before making investment decisions.
+            </p>
+          </div>
+
           <p className="text-xs sm:text-sm text-neutral-500">
             Data sourced from FRED, Yahoo Finance, and CoinGecko.
             <span className="hidden sm:inline"> Last updated: {new Date(data.metadata.lastUpdated).toLocaleDateString('en-US', {

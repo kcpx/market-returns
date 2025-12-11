@@ -74,31 +74,23 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
   }, [periodType, data]);
 
   return (
-    <div
-      ref={scrollContainerRef}
-      className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent">
-      <div className="min-w-max">
-        {/* Header row with periods */}
-        <div className="flex gap-1 mb-3 pl-44">
-          {sortedPeriods.map(period => (
-            <div
-              key={period}
-              className="w-[72px] text-center text-xs text-neutral-400 font-medium"
-            >
-              {formatPeriodLabel(period, periodType)}
-            </div>
-          ))}
+    <div className="relative">
+      {/* Fixed left column for market names */}
+      <div className="absolute left-0 top-0 z-10 bg-neutral-900/95 backdrop-blur-sm">
+        {/* Header spacer */}
+        <div className="h-[28px] mb-3 flex items-center pl-2">
+          <span className="text-xs text-neutral-500 font-medium">Market</span>
         </div>
 
-        {/* Market rows grouped by category */}
+        {/* Category and market labels */}
         {sortedCategories.map(([categoryId, category]) => {
           const markets = marketsByCategory.get(categoryId);
           if (!markets || markets.length === 0) return null;
-          
+
           return (
             <div key={categoryId} className="mb-6">
               {/* Category header */}
-              <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center gap-3 mb-3 h-6">
                 <div
                   className="w-4 h-4 rounded-full"
                   style={{ backgroundColor: category.color }}
@@ -108,10 +100,9 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
                 </span>
               </div>
 
-              {/* Market rows */}
+              {/* Market labels */}
               {markets.map(market => (
-                <div key={market.id} className="flex gap-1 mb-1.5 group">
-                  {/* Market label */}
+                <div key={market.id} className="flex gap-1 mb-1.5 h-12 items-center group">
                   <div className="w-44 flex items-center gap-2 pr-3">
                     <div
                       className="w-2.5 h-2.5 rounded-full flex-shrink-0 ring-2 ring-transparent group-hover:ring-white/20 transition-all"
@@ -121,22 +112,59 @@ export function HeatmapGrid({ data, periodType, startYear, endYear }: HeatmapGri
                       {market.name}
                     </span>
                   </div>
-
-                  {/* Return cells */}
-                  {sortedPeriods.map(period => (
-                    <div key={period} className="w-[72px]">
-                      <ReturnCell
-                        returnPct={getReturn(market.id, period)}
-                        period={period}
-                        marketName={market.name}
-                      />
-                    </div>
-                  ))}
                 </div>
               ))}
             </div>
           );
         })}
+      </div>
+
+      {/* Scrollable data area */}
+      <div
+        ref={scrollContainerRef}
+        className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pl-44">
+        <div className="min-w-max">
+          {/* Header row with periods */}
+          <div className="flex gap-1 mb-3">
+            {sortedPeriods.map(period => (
+              <div
+                key={period}
+                className="w-[72px] text-center text-xs text-neutral-400 font-medium"
+              >
+                {formatPeriodLabel(period, periodType)}
+              </div>
+            ))}
+          </div>
+
+          {/* Market rows grouped by category */}
+          {sortedCategories.map(([categoryId, category]) => {
+            const markets = marketsByCategory.get(categoryId);
+            if (!markets || markets.length === 0) return null;
+
+            return (
+              <div key={categoryId} className="mb-6">
+                {/* Category header spacer */}
+                <div className="h-6 mb-3" />
+
+                {/* Market data rows */}
+                {markets.map(market => (
+                  <div key={market.id} className="flex gap-1 mb-1.5">
+                    {/* Return cells */}
+                    {sortedPeriods.map(period => (
+                      <div key={period} className="w-[72px]">
+                        <ReturnCell
+                          returnPct={getReturn(market.id, period)}
+                          period={period}
+                          marketName={market.name}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

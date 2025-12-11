@@ -51,6 +51,14 @@ export function TrendChart({ data, periodType, startYear, endYear }: TrendChartP
       });
     }
 
+    // Limit quarterly to start from 2020
+    if (periodType === 'quarterly') {
+      sortedPeriods = sortedPeriods.filter(period => {
+        const year = parseInt(period.split('-')[0]);
+        return year >= 2020;
+      });
+    }
+
     // Build data points
     return sortedPeriods.map(period => {
       const point: Record<string, string | number | null> = { period };

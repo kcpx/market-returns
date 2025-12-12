@@ -27,16 +27,25 @@ type ChartMode = 'returns' | 'indexed';
 export function SectorCompareChart({ data, periodType, startYear, endYear }: SectorCompareChartProps) {
   const [chartMode, setChartMode] = useState<ChartMode>('indexed');
   const [selectedCategory, setSelectedCategory] = useState<MarketCategory | 'all'>('all');
+  const [excludeCrypto, setExcludeCrypto] = useState(false);
+  const [useLogScale, setUseLogScale] = useState(true);
 
   const sortedCategories = getSortedCategories();
 
-  // Get markets filtered by selected category
+  // Get markets filtered by selected category and crypto exclusion
   const filteredMarkets = useMemo(() => {
-    if (selectedCategory === 'all') {
-      return data.markets;
+    let markets = data.markets;
+
+    if (selectedCategory !== 'all') {
+      markets = markets.filter(m => m.category === selectedCategory);
     }
-    return data.markets.filter(m => m.category === selectedCategory);
-  }, [data.markets, selectedCategory]);
+
+    if (excludeCrypto) {
+      markets = markets.filter(m => m.category !== 'crypto');
+    }
+
+    return markets;
+  }, [data.markets, selectedCategory, excludeCrypto]);
 
   // Build chart data with individual market returns
   const chartData = useMemo(() => {
@@ -116,6 +125,44 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
 
     return rawData;
   }, [data, periodType, startYear, endYear, filteredMarkets, chartMode]);
+
+  // Calculate Y-axis domain for better scaling
+  const yAxisDomain = useMemo(() => {
+    if (chartData.length === 0) return ['auto', 'auto'];
+
+    let minVal = Infinity;
+    let maxVal = -Infinity;
+
+    for (const point of chartData) {
+      for (const market of filteredMarkets) {
+        const val = point[market.id] as number | null;
+        if (val !== null && val !== undefined) {
+          minVal = Math.min(minVal, val);
+          maxVal = Math.max(maxVal, val);
+        }
+      }
+    }
+
+    if (chartMode === 'indexed') {
+      // For indexed mode, ensure we have nice round numbers
+      // and always include 100 (the starting point)
+      const minBound = Math.min(minVal * 0.9, 100);
+      const maxBound = Math.max(maxVal * 1.1, 100);
+
+      if (useLogScale) {
+        // For log scale, use powers of 10 or nice round numbers
+        const logMin = Math.max(1, Math.floor(minBound / 10) * 10);
+        const logMax = Math.ceil(maxBound / 100) * 100;
+        return [logMin, logMax];
+      }
+
+      return [Math.floor(minBound / 10) * 10, Math.ceil(maxBound / 100) * 100];
+    } else {
+      // For returns mode, pad by 10% and include 0
+      const padding = Math.max(Math.abs(maxVal), Math.abs(minVal)) * 0.1;
+      return [Math.floor(minVal - padding), Math.ceil(maxVal + padding)];
+    }
+  }, [chartData, filteredMarkets, chartMode, useLogScale]);
 
   // Format period label for X axis
   const formatXAxis = (period: string) => {
@@ -236,9 +283,36 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
           </button>
         </div>
 
+        {/* Scale Options */}
+        <div className="flex items-center gap-3 sm:gap-4">
+          {chartMode === 'indexed' && (
+            <label className="flex items-center gap-1.5 sm:gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={useLogScale}
+                onChange={(e) => setUseLogScale(e.target.checked)}
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded border-neutral-600 bg-neutral-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-neutral-900"
+              />
+              <span className="text-xs sm:text-sm text-neutral-400">Log Scale</span>
+            </label>
+          )}
+
+          {selectedCategory === 'all' && (
+            <label className="flex items-center gap-1.5 sm:gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={excludeCrypto}
+                onChange={(e) => setExcludeCrypto(e.target.checked)}
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded border-neutral-600 bg-neutral-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-neutral-900"
+              />
+              <span className="text-xs sm:text-sm text-neutral-400">Exclude Crypto</span>
+            </label>
+          )}
+        </div>
+
         {/* Description */}
         <div className="text-xs sm:text-sm text-neutral-500 ml-auto">
-          {chartMode === 'indexed' ? 'Cumulative growth starting at $100' : 'Returns per period'} • {filteredMarkets.length} markets
+          {filteredMarkets.length} markets
         </div>
       </div>
 
@@ -263,10 +337,17 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
             <YAxis
               stroke="#737373"
               tick={{ fill: '#a3a3a3', fontSize: 10 }}
-              tickFormatter={(value) => chartMode === 'indexed' ? `$${value}` : `${value}%`}
-              domain={chartMode === 'indexed' ? ['auto', 'auto'] : ['auto', 'auto']}
-              width={50}
-              scale={chartMode === 'indexed' ? 'log' : 'auto'}
+              tickFormatter={(value) => {
+                if (chartMode === 'indexed') {
+                  if (value >= 1000) return `$${(value / 1000).toFixed(0)}k`;
+                  return `$${value}`;
+                }
+                return `${value}%`;
+              }}
+              domain={yAxisDomain}
+              width={55}
+              scale={chartMode === 'indexed' && useLogScale ? 'log' : 'auto'}
+              allowDataOverflow={false}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend

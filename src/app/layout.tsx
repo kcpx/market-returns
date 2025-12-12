@@ -3,9 +3,9 @@ import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Market Returns | All Asset Classes at a Glance',
-  description: 'See how stocks, bonds, commodities, crypto, and more performed over time. A simple visual tool for understanding market returns.',
-  keywords: ['market returns', 'asset allocation', 'investing', 'stocks', 'bonds', 'commodities', 'crypto'],
+  title: 'ReturnRadar | All Asset Classes at a Glance',
+  description: 'Track returns across stocks, bonds, commodities, crypto, and more. A simple visual tool for understanding market performance over time.',
+  keywords: ['return radar', 'market returns', 'asset allocation', 'investing', 'stocks', 'bonds', 'commodities', 'crypto', 'heatmap'],
 };
 
 export default function RootLayout({

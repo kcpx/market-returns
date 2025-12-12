@@ -123,7 +123,7 @@ export default function Home() {
                 </svg>
               </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-100 tracking-tight">
-                Market Returns
+                ReturnRadar
               </h1>
             </div>
 

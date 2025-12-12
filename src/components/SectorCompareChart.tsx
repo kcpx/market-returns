@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   LineChart,
   Line,
@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  ReferenceLine,
 } from 'recharts';
 import { MarketData, PeriodType } from '@/types';
 import { CATEGORIES, getSortedCategories } from '@/lib/markets';
@@ -21,8 +22,21 @@ interface SectorCompareChartProps {
   endYear?: number;
 }
 
+type ChartMode = 'returns' | 'indexed';
+
 export function SectorCompareChart({ data, periodType, startYear, endYear }: SectorCompareChartProps) {
+  const [chartMode, setChartMode] = useState<ChartMode>('indexed');
+  const [excludeCrypto, setExcludeCrypto] = useState(false);
+
   const sortedCategories = getSortedCategories();
+
+  // Filter categories based on excludeCrypto
+  const filteredCategories = useMemo(() => {
+    if (excludeCrypto) {
+      return sortedCategories.filter(([id]) => id !== 'crypto');
+    }
+    return sortedCategories;
+  }, [sortedCategories, excludeCrypto]);
 
   // Build chart data with average returns per sector
   const chartData = useMemo(() => {
@@ -63,10 +77,10 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
     }
 
     // Build data points with average return per sector
-    return sortedPeriods.map(period => {
+    const rawData = sortedPeriods.map(period => {
       const point: Record<string, string | number | null> = { period };
 
-      for (const [categoryId] of sortedCategories) {
+      for (const [categoryId] of filteredCategories) {
         const marketIds = marketsByCategory.get(categoryId) || [];
         const returns: number[] = [];
 
@@ -89,7 +103,39 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
 
       return point;
     });
-  }, [data, periodType, startYear, endYear, sortedCategories]);
+
+    // If indexed mode, convert to cumulative growth starting at 100
+    if (chartMode === 'indexed') {
+      const indexedData: typeof rawData = [];
+      const cumulativeValue: Record<string, number> = {};
+
+      // Initialize all sectors at 100
+      for (const [categoryId] of filteredCategories) {
+        cumulativeValue[categoryId] = 100;
+      }
+
+      for (const point of rawData) {
+        const indexedPoint: Record<string, string | number | null> = { period: point.period };
+
+        for (const [categoryId] of filteredCategories) {
+          const returnPct = point[categoryId] as number | null;
+          if (returnPct !== null) {
+            // Apply the return to cumulative value
+            cumulativeValue[categoryId] = cumulativeValue[categoryId] * (1 + returnPct / 100);
+            indexedPoint[categoryId] = parseFloat(cumulativeValue[categoryId].toFixed(2));
+          } else {
+            indexedPoint[categoryId] = cumulativeValue[categoryId];
+          }
+        }
+
+        indexedData.push(indexedPoint);
+      }
+
+      return indexedData;
+    }
+
+    return rawData;
+  }, [data, periodType, startYear, endYear, filteredCategories, chartMode]);
 
   // Format period label for X axis
   const formatXAxis = (period: string) => {
@@ -122,14 +168,16 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
             <span className="text-neutral-400">{CATEGORIES[entry.dataKey]?.label || entry.dataKey}:</span>
             <span
               className={`font-medium ${
-                entry.value > 0
-                  ? 'text-emerald-400'
-                  : entry.value < 0
-                  ? 'text-rose-400'
-                  : 'text-neutral-400'
+                chartMode === 'indexed'
+                  ? entry.value >= 100 ? 'text-emerald-400' : 'text-rose-400'
+                  : entry.value > 0 ? 'text-emerald-400' : entry.value < 0 ? 'text-rose-400' : 'text-neutral-400'
               }`}
             >
-              {entry.value !== null ? `${entry.value > 0 ? '+' : ''}${entry.value.toFixed(1)}%` : '—'}
+              {entry.value !== null
+                ? chartMode === 'indexed'
+                  ? entry.value.toFixed(0)
+                  : `${entry.value > 0 ? '+' : ''}${entry.value.toFixed(1)}%`
+                : '—'}
             </span>
           </div>
         ))}
@@ -139,9 +187,51 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* Description */}
-      <div className="text-sm text-neutral-400">
-        Average returns across all markets in each sector
+      {/* Controls */}
+      <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+        {/* Mode Toggle */}
+        <div className="flex gap-0.5 sm:gap-1 p-0.5 sm:p-1 bg-neutral-800 rounded-lg">
+          <button
+            onClick={() => setChartMode('indexed')}
+            className={`
+              px-2 py-1 sm:px-3 sm:py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all
+              ${chartMode === 'indexed'
+                ? 'bg-neutral-100 text-neutral-900'
+                : 'text-neutral-400 hover:text-neutral-100 hover:bg-neutral-700'
+              }
+            `}
+          >
+            Growth of $100
+          </button>
+          <button
+            onClick={() => setChartMode('returns')}
+            className={`
+              px-2 py-1 sm:px-3 sm:py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all
+              ${chartMode === 'returns'
+                ? 'bg-neutral-100 text-neutral-900'
+                : 'text-neutral-400 hover:text-neutral-100 hover:bg-neutral-700'
+              }
+            `}
+          >
+            Period Returns
+          </button>
+        </div>
+
+        {/* Exclude Crypto Toggle */}
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={excludeCrypto}
+            onChange={(e) => setExcludeCrypto(e.target.checked)}
+            className="w-4 h-4 rounded border-neutral-600 bg-neutral-800 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-neutral-900"
+          />
+          <span className="text-xs sm:text-sm text-neutral-400">Exclude Crypto</span>
+        </label>
+
+        {/* Description */}
+        <div className="text-xs sm:text-sm text-neutral-500 ml-auto">
+          {chartMode === 'indexed' ? 'Cumulative growth starting at $100' : 'Average returns per period'}
+        </div>
       </div>
 
       {/* Chart */}
@@ -165,9 +255,10 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
             <YAxis
               stroke="#737373"
               tick={{ fill: '#a3a3a3', fontSize: 10 }}
-              tickFormatter={(value) => `${value}%`}
-              domain={['auto', 'auto']}
-              width={40}
+              tickFormatter={(value) => chartMode === 'indexed' ? `$${value}` : `${value}%`}
+              domain={chartMode === 'indexed' ? ['auto', 'auto'] : ['auto', 'auto']}
+              width={50}
+              scale={chartMode === 'indexed' ? 'log' : 'auto'}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend
@@ -178,16 +269,13 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
                 </span>
               )}
             />
-            {/* Zero reference line */}
-            <Line
-              type="monotone"
-              dataKey={() => 0}
+            {/* Reference line - 100 for indexed, 0 for returns */}
+            <ReferenceLine
+              y={chartMode === 'indexed' ? 100 : 0}
               stroke="#525252"
               strokeDasharray="5 5"
-              dot={false}
-              legendType="none"
             />
-            {sortedCategories.map(([categoryId, category]) => (
+            {filteredCategories.map(([categoryId, category]) => (
               <Line
                 key={categoryId}
                 type="monotone"
@@ -206,8 +294,10 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
 
       {/* Legend with sector info */}
       <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
-        {sortedCategories.map(([categoryId, category]) => {
+        {filteredCategories.map(([categoryId, category]) => {
           const marketCount = data.markets.filter(m => m.category === categoryId).length;
+          // Get final value for this sector
+          const finalValue = chartData.length > 0 ? chartData[chartData.length - 1][categoryId] as number : null;
           return (
             <div key={categoryId} className="flex items-center gap-1.5 sm:gap-2">
               <div
@@ -215,6 +305,11 @@ export function SectorCompareChart({ data, periodType, startYear, endYear }: Sec
                 style={{ backgroundColor: category.color }}
               />
               <span className="text-xs sm:text-sm text-neutral-300">{category.label}</span>
+              {chartMode === 'indexed' && finalValue !== null && (
+                <span className={`text-[10px] sm:text-xs font-medium ${finalValue >= 100 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  ${finalValue.toFixed(0)}
+                </span>
+              )}
               <span className="text-[10px] sm:text-xs text-neutral-500">({marketCount})</span>
             </div>
           );

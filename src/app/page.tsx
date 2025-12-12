@@ -8,7 +8,9 @@ import {
   ColorLegend,
   YearRangeSelector,
   TrendChart,
-  SectorCompareChart
+  SectorCompareChart,
+  ErrorBoundary,
+  DataError
 } from '@/components';
 import staticMarketData from '@/data/market-data.json';
 
@@ -18,6 +20,7 @@ export default function Home() {
   const [data, setData] = useState<MarketData>(staticMarketData as MarketData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [fetchFailed, setFetchFailed] = useState(false);
   const [periodType, setPeriodType] = useState<PeriodType>('yearly');
   const [viewMode, setViewMode] = useState<'heatmap' | 'chart' | 'sectors'>('heatmap');
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -47,6 +50,10 @@ export default function Home() {
     } catch (err) {
       console.error('Error fetching live data:', err);
       setError('Using cached data - live fetch failed');
+      // Only mark as failed if we don't have valid static data
+      if (!staticMarketData || !staticMarketData.markets?.length) {
+        setFetchFailed(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -278,35 +285,49 @@ export default function Home() {
 
         {/* Main Content */}
         <div className="bg-neutral-900/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 md:p-8 border border-neutral-800/50 shadow-2xl">
-          {loading ? (
-            <div className="flex items-center justify-center py-10 sm:py-20">
-              <div className="flex flex-col items-center gap-3 sm:gap-4">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 border-2 sm:border-3 border-emerald-400 border-t-transparent rounded-full animate-spin" />
-                <p className="text-sm sm:text-base text-neutral-400">Loading live market data...</p>
+          <ErrorBoundary
+            fallback={
+              <DataError
+                message="Something went wrong while rendering the dashboard"
+                onRetry={() => window.location.reload()}
+              />
+            }
+          >
+            {fetchFailed ? (
+              <DataError
+                message="Failed to load market data. Please check your connection and try again."
+                onRetry={() => fetchLiveData()}
+              />
+            ) : loading ? (
+              <div className="flex items-center justify-center py-10 sm:py-20">
+                <div className="flex flex-col items-center gap-3 sm:gap-4">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 border-2 sm:border-3 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                  <p className="text-sm sm:text-base text-neutral-400">Loading live market data...</p>
+                </div>
               </div>
-            </div>
-          ) : viewMode === 'heatmap' ? (
-            <HeatmapGrid
-              data={data}
-              periodType={periodType}
-              startYear={startYear}
-              endYear={endYear}
-            />
-          ) : viewMode === 'chart' ? (
-            <TrendChart
-              data={data}
-              periodType={periodType}
-              startYear={startYear}
-              endYear={endYear}
-            />
-          ) : (
-            <SectorCompareChart
-              data={data}
-              periodType={periodType}
-              startYear={startYear}
-              endYear={endYear}
-            />
-          )}
+            ) : viewMode === 'heatmap' ? (
+              <HeatmapGrid
+                data={data}
+                periodType={periodType}
+                startYear={startYear}
+                endYear={endYear}
+              />
+            ) : viewMode === 'chart' ? (
+              <TrendChart
+                data={data}
+                periodType={periodType}
+                startYear={startYear}
+                endYear={endYear}
+              />
+            ) : (
+              <SectorCompareChart
+                data={data}
+                periodType={periodType}
+                startYear={startYear}
+                endYear={endYear}
+              />
+            )}
+          </ErrorBoundary>
         </div>
 
         {/* Footer */}

@@ -10,6 +10,10 @@ import {
 } from '@/lib/utils';
 import { MarketData } from '@/types';
 
+// Disable caching - always fetch fresh data
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const FRED_API_KEY = process.env.FRED_API_KEY;
 
 // Helper to calculate returns from price map
@@ -141,5 +145,12 @@ export async function GET() {
     },
   };
 
-  return NextResponse.json(data);
+  // Return with cache control headers
+  return NextResponse.json(data, {
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    },
+  });
 }

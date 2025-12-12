@@ -27,7 +27,13 @@ export default function Home() {
   const fetchLiveData = useCallback(async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true);
-      const response = await fetch('/api/market-data');
+      // Add cache-busting query param to ensure fresh data
+      const response = await fetch(`/api/market-data?t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
 
       if (!response.ok) {
         throw new Error('Failed to fetch live data');

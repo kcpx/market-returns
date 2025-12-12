@@ -4,3 +4,4 @@ export { HeatmapGrid } from './HeatmapGrid';
 export { ColorLegend } from './ColorLegend';
 export { YearRangeSelector } from './YearRangeSelector';
 export { TrendChart } from './TrendChart';
+export { SectorCompareChart } from './SectorCompareChart';

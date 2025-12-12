@@ -7,7 +7,8 @@ import {
   PeriodSelector,
   ColorLegend,
   YearRangeSelector,
-  TrendChart
+  TrendChart,
+  SectorCompareChart
 } from '@/components';
 import staticMarketData from '@/data/market-data.json';
 
@@ -18,7 +19,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [periodType, setPeriodType] = useState<PeriodType>('yearly');
-  const [viewMode, setViewMode] = useState<'heatmap' | 'chart'>('heatmap');
+  const [viewMode, setViewMode] = useState<'heatmap' | 'chart' | 'sectors'>('heatmap');
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [nextUpdate, setNextUpdate] = useState<Date | null>(null);
 
@@ -210,7 +211,7 @@ export default function Home() {
               <button
                 onClick={() => setViewMode('heatmap')}
                 className={`
-                  px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-150 flex items-center gap-1.5 sm:gap-2
+                  px-2 py-1.5 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-150 flex items-center gap-1 sm:gap-1.5
                   ${viewMode === 'heatmap'
                     ? 'bg-neutral-100 text-neutral-900'
                     : 'text-neutral-400 hover:text-neutral-100 hover:bg-neutral-700'
@@ -220,12 +221,12 @@ export default function Home() {
                 <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
-                Heatmap
+                <span className="hidden sm:inline">Heatmap</span>
               </button>
               <button
                 onClick={() => setViewMode('chart')}
                 className={`
-                  px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-150 flex items-center gap-1.5 sm:gap-2
+                  px-2 py-1.5 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-150 flex items-center gap-1 sm:gap-1.5
                   ${viewMode === 'chart'
                     ? 'bg-neutral-100 text-neutral-900'
                     : 'text-neutral-400 hover:text-neutral-100 hover:bg-neutral-700'
@@ -235,7 +236,22 @@ export default function Home() {
                 <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                 </svg>
-                Trendmap
+                <span className="hidden sm:inline">Markets</span>
+              </button>
+              <button
+                onClick={() => setViewMode('sectors')}
+                className={`
+                  px-2 py-1.5 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-150 flex items-center gap-1 sm:gap-1.5
+                  ${viewMode === 'sectors'
+                    ? 'bg-neutral-100 text-neutral-900'
+                    : 'text-neutral-400 hover:text-neutral-100 hover:bg-neutral-700'
+                  }
+                `}
+              >
+                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span className="hidden sm:inline">Sectors</span>
               </button>
             </div>
             <div className="h-6 sm:h-8 w-px bg-neutral-800 hidden sm:block" />
@@ -270,8 +286,15 @@ export default function Home() {
               startYear={startYear}
               endYear={endYear}
             />
-          ) : (
+          ) : viewMode === 'chart' ? (
             <TrendChart
+              data={data}
+              periodType={periodType}
+              startYear={startYear}
+              endYear={endYear}
+            />
+          ) : (
+            <SectorCompareChart
               data={data}
               periodType={periodType}
               startYear={startYear}

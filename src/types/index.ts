@@ -9,14 +9,14 @@ export interface Market {
   sourceId: string;
 }
 
-export type MarketCategory = 
+export type MarketCategory =
   | 'equities'
+  | 'sectors'
   | 'bonds'
   | 'commodities'
   | 'crypto'
   | 'forex'
-  | 'real-estate'
-  | 'energy';
+  | 'real-estate';
 
 export type DataSource = 'FRED' | 'YAHOO' | 'COINGECKO';
 

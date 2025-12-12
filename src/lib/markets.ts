@@ -151,6 +151,24 @@ export const MARKETS: Market[] = [
     source: 'YAHOO',
     sourceId: 'CL=F',
   },
+  {
+    id: 'wheat',
+    name: 'Wheat',
+    category: 'commodities',
+    description: 'Wheat Futures (ZW=F)',
+    color: '#D4A574',
+    source: 'YAHOO',
+    sourceId: 'ZW=F',
+  },
+  {
+    id: 'corn',
+    name: 'Corn',
+    category: 'commodities',
+    description: 'Corn Futures (ZC=F)',
+    color: '#EAB308',
+    source: 'YAHOO',
+    sourceId: 'ZC=F',
+  },
 
   // Energy (2)
   {
